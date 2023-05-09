@@ -1,0 +1,42 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix, roc_curve, roc_auc_score
+
+# Define true and predicted labels
+y_true = np.array([1, 0, 1, 1, 0, 1, 0, 0, 1, 0])
+y_pred = np.array([1, 1, 1, 0, 0, 1, 0, 1, 1, 0])
+
+# Compute confusion matrix
+cm = confusion_matrix(y_true, y_pred)
+
+# Compute performance metrics
+TP = cm[1,1]
+TN = cm[0,0]
+FP = cm[0,1]
+FN = cm[1,0]
+
+sensitivity = TP / (TP + FN)
+specificity = TN / (TN + FP)
+recall = sensitivity
+precision = TP / (TP + FP)
+f1_score = 2 * precision * recall / (precision + recall)
+
+# Compute ROC curve and AUC
+fpr, tpr, thresholds = roc_curve(y_true, y_pred)
+roc_auc = roc_auc_score(y_true, y_pred)
+
+# Plot ROC curve
+plt.plot(fpr, tpr, label='ROC curve (AUC = %0.2f)' % roc_auc)
+plt.plot([0, 1], [0, 1], 'k--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend(loc='lower right')
+plt.show()
+
+# Print results
+print('Confusion Matrix:\n', cm)
+print('Sensitivity (TPR):', sensitivity)
+print('Specificity (TNR):', specificity)
+print('Recall (TPR):', recall)
+print('Precision:', precision)
+print('F1 Score:', f1_score)
